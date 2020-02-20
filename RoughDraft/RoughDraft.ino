@@ -17,8 +17,8 @@ void loop() {
     float celsius = (voltage - 0.5) * 100;
     float fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
     lcd.setCursor(5, 0);
-    lcd.print(celsius);
+    lcd.print(String(celsius) + "C");
     lcd.setCursor(5, 1);
-    lcd.print(fahrenheit);
+    lcd.print(String(fahrenheit) + "F");
 }
 
