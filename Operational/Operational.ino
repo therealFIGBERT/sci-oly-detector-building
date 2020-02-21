@@ -2,7 +2,6 @@
 #include <Wire.h>
 #include <hd44780ioClass/hd44780_I2Cexp.h>
 hd44780_I2Cexp lcd;
-#define THERMISTORPIN A0
 #define THERMISTORNOMINAL 100000
 #define TEMPERATURENOMINAL 25
 #define NUMSAMPLES 10
@@ -19,10 +18,21 @@ void setup() {
 }
 
 void loop() {
+    float first = temperature(0), second = temperature(1);
+    float celsius = (first + second) / 2;
+    lcd.setCursor(5, 0);
+    lcd.print(String(celsius) + "C");
+    float fahrenheit = (celsius * 1.8) + 32;
+    lcd.setCursor(5, 1);
+    lcd.print(String(fahrenheit) + "F");
+    delay(1000);
+}
+
+float temperature(int pin) {
     uint8_t i;
     float average;
     for (i=0; i< NUMSAMPLES; i++) {
-     samples[i] = analogRead(THERMISTORPIN);
+     samples[i] = analogRead(pin);
      delay(10);
     }
     average = 0;
@@ -38,10 +48,5 @@ void loop() {
     celsius += 1.0 / (TEMPERATURENOMINAL + 273.15);
     celsius = 1.0 / celsius;
     celsius -= 273.15;
-    lcd.setCursor(5, 0);
-    lcd.print(String(celsius) + "C");
-    float fahrenheit = (celsius * 1.8) + 32;
-    lcd.setCursor(5, 1);
-    lcd.print(String(fahrenheit) + "F");
-    delay(1000);
+    return celsius;
 }
