@@ -7,7 +7,7 @@ hd44780_I2Cexp lcd;
 #define TEMPERATURENOMINAL 25
 #define NUMSAMPLES 10
 #define BCOEFFICIENT 4000
-#define SERIESRESISTOR 220    
+#define SERIESRESISTOR 100000    
  
 int samples[NUMSAMPLES];
 
