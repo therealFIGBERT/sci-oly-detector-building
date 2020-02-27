@@ -26,6 +26,7 @@ void loop() {
     lcd.setCursor(5, 1);
     lcd.print(String(fahrenheit) + "F");
     delay(1000);
+    lcd.clear();
 }
 
 float temperature(int pin) {
