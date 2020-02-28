@@ -18,32 +18,42 @@ void setup() {
 }
 
 void loop() {
-    float first = temperature(0), second = temperature(1);
-    float celsius = (first + second) / 2;
+    float first = voltage(0), second = voltage(1);
+    float bridge = (first + second) / 2;
+    float volts = bridge * (3.3 / 1023.0);
+    float res = resistance(bridge);
+    float temp = celsius(res);
     lcd.setCursor(5, 0);
-    lcd.print(String(celsius) + "C");
-    float fahrenheit = (celsius * 1.8) + 32;
+    lcd.print(String(temp) + "C");
     lcd.setCursor(5, 1);
-    lcd.print(String(fahrenheit) + "F");
+    lcd.print(String(volts) + "V");
     delay(1000);
     lcd.clear();
 }
 
-float temperature(int pin) {
+float voltage(int pin) {
     uint8_t i;
-    float average;
+    float volt;
     for (i=0; i< NUMSAMPLES; i++) {
      samples[i] = analogRead(pin);
      delay(10);
     }
-    average = 0;
+    volt = 0;
     for (i=0; i< NUMSAMPLES; i++) {
-       average += samples[i];
+       volt += samples[i];
     }
-    average /= NUMSAMPLES;
-    average = 1023 / average - 1;
-    average = SERIESRESISTOR / average;
-    float celsius = average / THERMISTORNOMINAL;
+    volt /= NUMSAMPLES;
+    return volt;
+}
+
+float resistance(float volts) {
+    volts = 1023 / volts - 1;
+    volts = SERIESRESISTOR / volts;
+    return volts;
+}
+
+float celsius(float res) {
+    float celsius = res / THERMISTORNOMINAL;
     celsius = log(celsius);
     celsius /= BCOEFFICIENT;
     celsius += 1.0 / (TEMPERATURENOMINAL + 273.15);
