@@ -6,8 +6,11 @@ hd44780_I2Cexp lcd;
 #define TEMPERATURENOMINAL 25
 #define NUMSAMPLES 2
 #define BCOEFFICIENT 4000
-#define SERIESRESISTOR 100000    
- 
+#define SERIESRESISTOR 100000
+
+int red_light_pin= 12;
+int green_light_pin = 10;
+int blue_light_pin = 11;
 int samples[NUMSAMPLES];
 
 void setup() {
@@ -15,6 +18,9 @@ void setup() {
     lcd.backlight();
     Serial.begin(9600);
     analogReference(EXTERNAL);
+    pinMode(red_light_pin, OUTPUT);
+    pinMode(green_light_pin, OUTPUT);
+    pinMode(blue_light_pin, OUTPUT);
 }
 
 void loop() {
@@ -27,6 +33,19 @@ void loop() {
     lcd.print(String(temp) + "C");
     lcd.setCursor(5, 1);
     lcd.print(String(volts) + "V");
+    if (temp < 18.0) {
+      digitalWrite(blue_light_pin, HIGH);
+      digitalWrite(green_light_pin, LOW);
+      digitalWrite(red_light_pin, LOW);
+    } else if (temp < 25.0) {
+      digitalWrite(blue_light_pin, LOW);
+      digitalWrite(green_light_pin, HIGH);
+      digitalWrite(red_light_pin, LOW);
+    } else {
+      digitalWrite(blue_light_pin, LOW);
+      digitalWrite(green_light_pin, LOW);
+      digitalWrite(red_light_pin, HIGH);
+    }
     delay(1000);
     lcd.clear();
 }
