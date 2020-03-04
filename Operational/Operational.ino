@@ -33,15 +33,19 @@ void loop() {
     lcd.print(String(temp) + "C");
     lcd.setCursor(5, 1);
     lcd.print(String(volts) + "V");
-    if (temp < 18.0) {
+    if (temp < 0.0) {
+      digitalWrite(blue_light_pin, LOW);
+      digitalWrite(green_light_pin, LOW);
+      digitalWrite(red_light_pin, LOW);
+    } else if (temp < 21.0) {
       digitalWrite(blue_light_pin, HIGH);
       digitalWrite(green_light_pin, LOW);
       digitalWrite(red_light_pin, LOW);
-    } else if (temp < 25.0) {
+    } else if (temp < 52.0) {
       digitalWrite(blue_light_pin, LOW);
       digitalWrite(green_light_pin, HIGH);
       digitalWrite(red_light_pin, LOW);
-    } else {
+    } else if (temp <= 75.0) {
       digitalWrite(blue_light_pin, LOW);
       digitalWrite(green_light_pin, LOW);
       digitalWrite(red_light_pin, HIGH);
